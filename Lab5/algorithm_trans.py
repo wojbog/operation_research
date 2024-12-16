@@ -242,17 +242,25 @@ def algorithm(cost_matrix, s_limits, d_limits):
     average_chain = 0
     while smallest<0:
         licznik+=1
+        # print(f"iteracja: {licznik}")
         _, stos = get_path(base, index, index, False, [], False)
+        # print(stos)
         average_chain+=len(stos)
         mini_substruction=min([m_matrix[stos[i][0]][stos[i][1]] for i in range(1,len(stos),2)])
+        check = True
         for i in range(1,len(stos),2):
             m_matrix[stos[i][0]][stos[i][1]]-=mini_substruction
+            if m_matrix[stos[i][0]][stos[i][1]] == 0 and check:
+                m_matrix[stos[i][0]][stos[i][1]] = 'Z'
+                check = False
         for i in range(2,len(stos),2):
             m_matrix[stos[i][0]][stos[i][1]]+=mini_substruction
         
         m_matrix[stos[0][0]][stos[0][1]]=mini_substruction
         base = change_base(base, stos, m_matrix)
+        # print("tutaj")
         u_source, v_destination = generate_U_V(cost_matrix, base)
+        # print('jestem')
         m_matrix = fill_in_matrix(cost_matrix, base, u_source, v_destination)
 
         smallest, index = get_the_smallest(m_matrix)
@@ -263,35 +271,37 @@ def algorithm(cost_matrix, s_limits, d_limits):
 
 if __name__ == "__main__":
     # cost_matrix, s_limits, d_limits = load_data_from_example()
-    cost_matrix = genereate_random_matrix(6)
-    # cost_matrix = [[10, 1, 9, 3, 1, 3], [4, 9, 4, 2, 10, 2], [2, 2, 10, 6, 0, 2], [9, 3, 10, 2, 9, 9], [5, 9, 1, 10, 4, 3], [0, 0, 2, 3, 2, 3]]
-    # s_limits = [13, 1, 2, 10, 4, 71]
-    # d_limits = [5, 13, 33, 15, 29, 6]
-    s_limits, d_limits = generate_random_limits(6)
-    base = find_basic_base(cost_matrix, s_limits, d_limits)
+    # cost_matrix = genereate_random_matrix(6)
+    cost_matrix = [[9, 7, 1, 1, 8], [5, 3, 3, 4, 9], [7, 4, 0, 1, 9], [7, 3, 6, 1, 7], [1, 8, 2, 3, 5]]
+    s_limits = [15, 23, 53, 4, 5]
+    d_limits = [16, 12, 11, 9, 52]
+    # s_limits, d_limits = generate_random_limits(6)
+    # base = find_basic_base(cost_matrix, s_limits, d_limits)
 
-    u_source, v_destination = generate_U_V(cost_matrix, base)
+    # u_source, v_destination = generate_U_V(cost_matrix, base)
 
-    m_matrix = fill_in_matrix(cost_matrix, base, u_source, v_destination)
+    # m_matrix = fill_in_matrix(cost_matrix, base, u_source, v_destination)
 
-    smallest, index = get_the_smallest(m_matrix)
-    licznik = 0
-    while smallest<0:
-        licznik+=1
-        check, stos = get_path(base, index, index, False, [], False)
-        mini_substruction=min([m_matrix[stos[i][0]][stos[i][1]] for i in range(1,len(stos),2)])
-        for i in range(1,len(stos),2):
-            m_matrix[stos[i][0]][stos[i][1]]-=mini_substruction
-        for i in range(2,len(stos),2):
-            m_matrix[stos[i][0]][stos[i][1]]+=mini_substruction
+    # smallest, index = get_the_smallest(m_matrix)
+    # licznik = 0
+    # while smallest<0:
+    #     licznik+=1
+    #     check, stos = get_path(base, index, index, False, [], False)
+    #     mini_substruction=min([m_matrix[stos[i][0]][stos[i][1]] for i in range(1,len(stos),2)])
+    #     for i in range(1,len(stos),2):
+    #         m_matrix[stos[i][0]][stos[i][1]]-=mini_substruction
+    #     for i in range(2,len(stos),2):
+    #         m_matrix[stos[i][0]][stos[i][1]]+=mini_substruction
         
-        m_matrix[stos[0][0]][stos[0][1]]=mini_substruction
-        base = change_base(base, stos, m_matrix)
+    #     m_matrix[stos[0][0]][stos[0][1]]=mini_substruction
+    #     base = change_base(base, stos, m_matrix)
 
-        u_source, v_destination = generate_U_V(cost_matrix, base)
+    #     u_source, v_destination = generate_U_V(cost_matrix, base)
 
-        m_matrix = fill_in_matrix(cost_matrix, base, u_source, v_destination)
+    #     m_matrix = fill_in_matrix(cost_matrix, base, u_source, v_destination)
 
-        smallest, index = get_the_smallest(m_matrix)
+    #     smallest, index = get_the_smallest(m_matrix)
 
-    print(calculate_cost(cost_matrix, base))
+    # print(calculate_cost(cost_matrix, base))
+    optimum, _, _ = algorithm(cost_matrix, s_limits, d_limits)
+    print(optimum)
